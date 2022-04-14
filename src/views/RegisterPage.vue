@@ -247,8 +247,8 @@ import MessageStore from '@/store/modules/MessageStore'
   components: { TheLayout }
 })
 export default class RegisterPage extends Vue {
-  step = 4
-  email = '20307140003@fudan.edu.cn'
+  step = 1
+  email = ''
   code = ''
   password = ''
   password2 = ''
@@ -335,7 +335,7 @@ export default class RegisterPage extends Vue {
     const email = localStorage.getItem('email')
     if (email && this.checkEmail(email)) {
       this.email = email
-      this.step = 4
+      this.step = 2
     }
   }
 }
