@@ -3,6 +3,7 @@
     <v-form
       ref="form"
       lazy-validation
+      @submit.prevent
     >
       <template v-if="step === 1">
         <v-card-title>

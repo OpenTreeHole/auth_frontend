@@ -58,7 +58,11 @@ export const login = async (email: string, password: string): Promise<{ message:
 }
 
 export const logout = async (): Promise<{ message: string }> => {
-  const response = await axios.get('/logout')
+  const response = await axios.get('/logout', {
+    headers: {
+      Authorization: 'Bearer ' + Cookies.get('access')
+    }
+  })
   Cookies.remove('access', { domain: config.cookieDomain })
   Cookies.remove('refresh', { domain: config.cookieDomain })
   return camelizeKeys(response.data)

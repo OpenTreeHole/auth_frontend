@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue'
 import RegisterPage from '@/views/RegisterPage.vue'
+import OnlinePage from '@/views/OnlinePage.vue'
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,14 @@ const routes: Array<RouteConfig> = [
       title: 'Open Tree Hole 注册'
     },
     component: RegisterPage
+  },
+  {
+    name: 'online',
+    path: '/online',
+    meta: {
+      title: 'Open Tree Hole 注册'
+    },
+    component: OnlinePage
   }
 ]
 

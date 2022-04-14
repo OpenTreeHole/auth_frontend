@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import MessageSnackbar from '@/components/MessageSnackbar.vue'
+import '@mdi/font/css/materialdesignicons.css'
 @Component({
   components: { MessageSnackbar }
 })
