@@ -17,3 +17,12 @@ import MessageSnackbar from '@/components/MessageSnackbar.vue'
 })
 export default class App extends Vue {}
 </script>
+
+<style lang="scss">
+.v-card__subtitle,
+.v-card__text {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+</style>

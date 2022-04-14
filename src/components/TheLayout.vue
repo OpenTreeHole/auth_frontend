@@ -1,39 +1,101 @@
 <template>
-  <v-container fill-height>
-    <v-row
-      align="center"
-      justify="center"
+  <div>
+    <v-container
+      fill-height
+      v-if="!isMobile"
     >
-      <v-col
-        cols="11"
-        sm="9"
-        md="7"
-        lg="5"
-        xl="4"
-        class="text-center"
+      <v-row
+        align="center"
+        justify="center"
       >
-        <v-card
-          class="pt-12 px-10 pb-9"
-          elevation="0"
-          outlined
+        <v-col
+          cols="11"
+          sm="9"
+          md="7"
+          lg="5"
+          xl="4"
+          class="text-center"
         >
-          <v-progress-linear
-            :active="isLoading"
-            indeterminate
-            absolute
-            top
-            color="teal"
+          <v-card
+            class="pt-12 px-10 pb-9"
+            elevation="0"
+            outlined
           >
-          </v-progress-linear>
-          <v-card-title class="justify-center">
-            <v-img
-              src="@/assets/img.png"
-              max-width="199px"
-            ></v-img>
-          </v-card-title>
-          <slot />
-        </v-card>
-        <span class="d-flex justify-end mt-2">
+            <v-progress-linear
+              :active="isLoading"
+              indeterminate
+              absolute
+              top
+              color="teal"
+            >
+            </v-progress-linear>
+            <v-card-title class="justify-center">
+              <v-img
+                src="@/assets/img.png"
+                max-width="199px"
+              ></v-img>
+            </v-card-title>
+            <slot />
+          </v-card>
+          <span class="d-flex justify-end mt-2">
+            <span class="d-flex ml-2">
+              <v-btn
+                text
+                color="secondary"
+                small
+                href="https://www.fduhole.com/#/license"
+              >
+                <span>社区公约</span>
+              </v-btn>
+            </span>
+            <span class="d-flex ml-2">
+              <v-btn
+                text
+                color="secondary"
+                small
+                href="https://github.com/OpenTreeHole/auth_frontend/blob/master/LICENSE"
+              >
+                <span>开源协议</span>
+              </v-btn>
+            </span>
+            <span class="d-flex ml-2">
+              <v-btn
+                text
+                color="secondary"
+                small
+                href="https://github.com/OpenTreeHole/"
+              >
+                <span>GITHUB</span>
+              </v-btn>
+            </span>
+          </span>
+        </v-col>
+      </v-row>
+    </v-container>
+    <div v-else>
+      <v-progress-linear
+        :active="isLoading"
+        indeterminate
+        absolute
+        top
+        color="teal"
+      >
+      </v-progress-linear>
+      <v-card-title class="justify-center mt-5">
+        <v-img
+          src="@/assets/img.png"
+          max-width="199px"
+        ></v-img>
+      </v-card-title>
+      <slot />
+      <v-footer
+        app
+        padless
+      >
+        <span
+          class="d-flex justify-end mt-2"
+          style="width: 100%"
+        >
           <span class="d-flex ml-2">
             <v-btn
               text
@@ -65,9 +127,9 @@
             </v-btn>
           </span>
         </span>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-footer>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -77,6 +139,7 @@ import Vue from 'vue'
 @Component
 export default class TheLayout extends Vue {
   isLoading = false
+  isMobile = document.body.clientWidth <= 768
 
   async load<T>(promise: Promise<T>) {
     this.isLoading = true

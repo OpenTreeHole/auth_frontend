@@ -197,8 +197,9 @@
               v-model="password"
             >
             </v-text-field>
+          </v-card-text>
+          <v-card-text class="mt-n9">
             <v-text-field
-              class="mt-n1"
               outlined
               clearable
               label="重复输入密码"
@@ -246,8 +247,8 @@ import MessageStore from '@/store/modules/MessageStore'
   components: { TheLayout }
 })
 export default class RegisterPage extends Vue {
-  step = 1
-  email = ''
+  step = 4
+  email = '20307140003@fudan.edu.cn'
   code = ''
   password = ''
   password2 = ''
@@ -334,7 +335,7 @@ export default class RegisterPage extends Vue {
     const email = localStorage.getItem('email')
     if (email && this.checkEmail(email)) {
       this.email = email
-      this.step = 2
+      this.step = 4
     }
   }
 }
