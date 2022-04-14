@@ -1,5 +1,5 @@
 <template>
-  <the-layout>
+  <the-layout ref="layout">
     <v-form
       ref="form"
       lazy-validation
@@ -33,6 +33,7 @@
             <v-btn
               text
               color="primary"
+              @click="$router.push({ name: 'register' })"
             >
               <span>注册 FDU Hole 账号</span>
             </v-btn>
@@ -50,6 +51,14 @@
       </template>
       <template v-else-if="step === 2">
         <v-card-title>
+          <span
+            class="flex-grow-1 text-center"
+            style="font-size: 24px"
+          >
+            输入您的密码
+          </span>
+        </v-card-title>
+        <v-card-subtitle class="mt-0">
           <span class="flex-grow-1 text-center">
             <v-btn
               outlined
@@ -80,7 +89,7 @@
               </div>
             </v-btn>
           </span>
-        </v-card-title>
+        </v-card-subtitle>
         <v-card-text class="mt-8">
           <v-text-field
             outlined
@@ -103,6 +112,7 @@
             <v-btn
               text
               color="primary"
+              @click="$router.push({ name: 'register', query: { type: 'forget_password' } })"
             >
               <span>忘记密码？</span>
             </v-btn>
@@ -126,6 +136,8 @@
 import { Component, Ref } from 'vue-property-decorator'
 import Vue from 'vue'
 import TheLayout from '@/components/TheLayout.vue'
+import { login } from '@/apis'
+import MessageStore from '@/store/modules/MessageStore'
 @Component({
   components: { TheLayout }
 })
@@ -136,6 +148,7 @@ export default class LoginPage extends Vue {
 
   showPassword = false
 
+  @Ref() layout!: TheLayout
   @Ref() form!: { validate: () => boolean }
 
   get passwordInputType() {
@@ -143,22 +156,43 @@ export default class LoginPage extends Vue {
   }
 
   get emailRules() {
-    return [() => this.checkEmail() || '不是正确的复旦学邮格式！']
+    return [(v: string) => this.checkEmail(v) || '不是正确的复旦学邮格式！']
   }
 
-  checkEmail() {
-    return /^\d+@(m\.)?fudan\.edu\.cn$/.test(this.email) || this.email === 'admin@opentreehole.org'
+  checkEmail(email: string) {
+    return /^\d+@(m\.)?fudan\.edu\.cn$/.test(email) || this.email === 'admin@opentreehole.org'
   }
 
-  submit() {
+  async submit() {
     if (this.form.validate()) {
-      if (this.step === 1) this.submitEmail()
+      switch (this.step) {
+        case 1:
+          this.submitEmail()
+          break
+        case 2:
+          await this.submitPassword()
+          break
+      }
     }
   }
 
   submitEmail() {
     localStorage.setItem('email', this.email)
     this.step++
+  }
+
+  async submitPassword() {
+    const { message } = await this.layout.load(login(this.email, this.password))
+    MessageStore.messageSuccess(message)
+    //
+  }
+
+  mounted() {
+    const email = localStorage.getItem('email')
+    if (email && this.checkEmail(email)) {
+      this.email = email
+      this.step = 2
+    }
   }
 }
 </script>

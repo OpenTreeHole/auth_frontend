@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <message-snackbar />
+
     <v-main>
       <router-view :key="$route.fullPath + ($route.params.id || '') + $route.query"></router-view>
     </v-main>
@@ -9,7 +11,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-
-@Component
+import MessageSnackbar from '@/components/MessageSnackbar.vue'
+@Component({
+  components: { MessageSnackbar }
+})
 export default class App extends Vue {}
 </script>
