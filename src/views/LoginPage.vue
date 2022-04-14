@@ -184,7 +184,7 @@ export default class LoginPage extends Vue {
   async submitPassword() {
     const { message } = await this.layout.load(login(this.email, this.password))
     MessageStore.messageSuccess(message)
-    //
+    if (this.$route.query.url) location.replace(this.$route.query.url as string)
   }
 
   mounted() {

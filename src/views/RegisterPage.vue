@@ -327,7 +327,7 @@ export default class RegisterPage extends Vue {
     const submitPasswordFunc = this.isForgetPassword ? changePassword : register
     const { message } = await this.layout.load(submitPasswordFunc(this.password, this.email, this.code))
     MessageStore.messageSuccess(message)
-    //
+    if (this.$route.query.url) location.replace(this.$route.query.url as string)
   }
 
   mounted() {
