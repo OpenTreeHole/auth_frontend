@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
 import config from '@/config'
 import { camelCase } from 'lodash-es'
+import JWTManager from '@/apis/jwt'
 
 const camelizeKeys = (obj: any): any => {
   if (Array.isArray(obj)) {
@@ -44,7 +45,10 @@ const errorInterceptor = async (error: AxiosError) => {
   }
 }
 
+const jwt = new JWTManager(async () => (await refresh()).access)
+
 axios.defaults.baseURL = config.authUrl
+axios.interceptors.response.use((response) => response, jwt.responseErrorInterceptor)
 axios.interceptors.response.use((response) => response, errorInterceptor)
 
 export const login = async (email: string, password: string): Promise<{ message: string; access?: string; refresh?: string }> => {
@@ -58,11 +62,7 @@ export const login = async (email: string, password: string): Promise<{ message:
 }
 
 export const logout = async (): Promise<{ message: string }> => {
-  const response = await axios.get('/logout', {
-    headers: {
-      Authorization: 'Bearer ' + Cookies.get('access')
-    }
-  })
+  const response = await axios.get('/logout', {})
   Cookies.remove('access', { domain: config.cookieDomain })
   Cookies.remove('refresh', { domain: config.cookieDomain })
   return camelizeKeys(response.data)
@@ -93,6 +93,17 @@ export const changePassword = async (password: string, email: string, verificati
     password: password,
     email: email,
     verification: verification
+  })
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
+  return camelizeKeys(response.data)
+}
+
+export const refresh = async (): Promise<{ message: string; access: string; refresh: string }> => {
+  const response = await axios.post('/refresh', {
+    headers: {
+      Authorization: 'Bearer ' + Cookies.get('refresh')
+    }
   })
   Cookies.set('access', response.data.access, { domain: config.cookieDomain })
   Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })

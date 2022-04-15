@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
+import { Component, Ref } from 'vue-property-decorator'
 import Vue from 'vue'
 import TheLayout from '@/components/TheLayout.vue'
 import Cookies from 'js-cookie'
@@ -46,12 +46,15 @@ export default class OnlinePage extends Vue {
   access = Cookies.get('access') || ''
   refresh = Cookies.get('refresh') || ''
 
+  @Ref() layout!: TheLayout
+
   mounted() {
     if (this.$route.query.url) location.replace(this.$route.query.url as string)
   }
 
   async logout() {
-    await logout()
+    await this.layout.load(logout())
+    await this.$router.push({ name: 'login' })
   }
 }
 </script>
