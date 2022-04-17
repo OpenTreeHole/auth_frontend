@@ -12,6 +12,10 @@ RUN yarn build
 
 FROM nginx:alpine
 
+RUN rm /etc/nginx/conf.d/default.conf
+
+ADD default.conf /etc/nginx/conf.d/
+
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/dist .
