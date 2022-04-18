@@ -157,11 +157,11 @@ export default class LoginPage extends Vue {
   }
 
   get emailRules() {
-    return [(v: string) => this.checkEmail(v) || '不是正确的复旦学邮格式！']
+    return [(v: string) => this.checkEmailLoose(v) || '不是正确的复旦学邮格式！']
   }
 
-  checkEmail(email: string) {
-    return /^\d+@(m\.)?fudan\.edu\.cn$/.test(email) || this.email === 'admin@opentreehole.org'
+  checkEmailLoose(email: string) {
+    return /^[a-zA-Z\d]+@(m\.)?fudan\.edu\.cn$/.test(email) || this.email === 'admin@opentreehole.org'
   }
 
   async submit() {

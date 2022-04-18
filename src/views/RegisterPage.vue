@@ -264,7 +264,9 @@ export default class RegisterPage extends Vue {
   }
 
   get emailRules() {
-    return [(v: string) => this.checkEmail(v) || '不是正确的复旦学邮格式！']
+    const rules: [(v: string) => true | string] = [(v: string) => this.checkEmailLoose(v) || '不是正确的复旦学邮格式！']
+    if (!this.isForgetPassword) rules.push((v: string) => this.checkEmailStrict(v) || '请使用学号邮箱注册！')
+    return rules
   }
 
   get codeRules() {
@@ -283,8 +285,12 @@ export default class RegisterPage extends Vue {
     return this.sendCodeTimeout > 0 ? this.sendCodeTimeout.toString() : '发送验证码'
   }
 
-  checkEmail(email: string) {
+  checkEmailStrict(email: string) {
     return /^\d+@(m\.)?fudan\.edu\.cn$/.test(email) || this.email === 'admin@opentreehole.org'
+  }
+
+  checkEmailLoose(email: string) {
+    return /^[a-zA-Z\d]+@(m\.)?fudan\.edu\.cn$/.test(email) || this.email === 'admin@opentreehole.org'
   }
 
   async submit() {
@@ -334,7 +340,7 @@ export default class RegisterPage extends Vue {
 
   mounted() {
     const email = localStorage.getItem('email')
-    if (email && this.checkEmail(email)) {
+    if (email && this.checkEmailStrict(email)) {
       this.email = email
       this.step = 2
     }
