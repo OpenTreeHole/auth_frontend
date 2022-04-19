@@ -72,6 +72,26 @@
     },
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-function": [
+        "warn",
+        {
+          "allow": [
+            "asyncMethods",
+            "methods",
+            "arrowFunctions"
+          ]
+        }
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "vars": "local",
+          "argsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^ignore",
+          "varsIgnorePattern": "[iI]gnored"
+        }
+      ],
+      "@typescript-eslint/no-non-null-assertion": "off",
       "linebreak-style": "off",
       "prettier/prettier": [
         "warn",

@@ -190,7 +190,7 @@ export default class LoginPage extends Vue {
 
   mounted() {
     const email = localStorage.getItem('email')
-    if (email && this.checkEmail(email)) {
+    if (email && this.checkEmailLoose(email)) {
       this.email = email
       this.step = 2
     }

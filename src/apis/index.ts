@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import config from '@/config'
 import { camelCase } from 'lodash-es'
 import JWTManager from '@/apis/jwt'
+import router from '@/router'
 
 const camelizeKeys = (obj: any): any => {
   if (Array.isArray(obj)) {
@@ -46,6 +47,17 @@ const errorInterceptor = async (error: AxiosError) => {
 }
 
 const jwt = new JWTManager(async () => (await refresh()).access)
+jwt.refreshErrorCallback = async (refreshError) => {
+  Cookies.remove('access', { domain: config.cookieDomain })
+  Cookies.remove('refresh', { domain: config.cookieDomain })
+  if (router.currentRoute.name !== 'login') {
+    await router.replace({
+      name: 'login'
+    })
+    if (refreshError.response?.data.message) return Promise.reject(new ApiError(refreshError, `${refreshError.response.status}: ${refreshError.response.data.message}`))
+    else return Promise.reject(new ApiError(refreshError, '会话已过期，请重新登录'))
+  }
+}
 
 axios.defaults.baseURL = config.authUrl
 axios.interceptors.response.use((response) => response, jwt.responseErrorInterceptor)
@@ -62,7 +74,12 @@ export const login = async (email: string, password: string): Promise<{ message:
 }
 
 export const logout = async (): Promise<{ message: string }> => {
-  const response = await axios.get('/logout', {})
+  const response = await axios.get('/logout', {
+    headers: {
+      Authorization: 'Bearer ' + Cookies.get('access')
+    }
+  })
+
   Cookies.remove('access', { domain: config.cookieDomain })
   Cookies.remove('refresh', { domain: config.cookieDomain })
   return camelizeKeys(response.data)
@@ -100,11 +117,17 @@ export const changePassword = async (password: string, email: string, verificati
 }
 
 export const refresh = async (): Promise<{ message: string; access: string; refresh: string }> => {
-  const response = await axios.post('/refresh', {
-    headers: {
-      Authorization: 'Bearer ' + Cookies.get('refresh')
+  const r = Cookies.get('refresh')
+  console.log(r)
+  const response = await axios.post(
+    '/refresh',
+    {},
+    {
+      headers: {
+        Authorization: 'Bearer ' + Cookies.get('refresh')
+      }
     }
-  })
+  )
   Cookies.set('access', response.data.access, { domain: config.cookieDomain })
   Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
   return camelizeKeys(response.data)
