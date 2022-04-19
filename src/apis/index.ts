@@ -68,8 +68,8 @@ export const login = async (email: string, password: string): Promise<{ message:
     email: email,
     password: password
   })
-  Cookies.set('access', response.data.access, { domain: config.cookieDomain })
-  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
@@ -80,8 +80,8 @@ export const logout = async (): Promise<{ message: string }> => {
     }
   })
 
-  Cookies.remove('access', { domain: config.cookieDomain })
-  Cookies.remove('refresh', { domain: config.cookieDomain })
+  Cookies.remove('access', { domain: config.cookieDomain, expires: 10 })
+  Cookies.remove('refresh', { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
@@ -100,8 +100,8 @@ export const register = async (password: string, email: string, verification: st
     email: email,
     verification: verification
   })
-  Cookies.set('access', response.data.access, { domain: config.cookieDomain })
-  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
@@ -111,8 +111,8 @@ export const changePassword = async (password: string, email: string, verificati
     email: email,
     verification: verification
   })
-  Cookies.set('access', response.data.access, { domain: config.cookieDomain })
-  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
 
@@ -128,7 +128,7 @@ export const refresh = async (): Promise<{ message: string; access: string; refr
       }
     }
   )
-  Cookies.set('access', response.data.access, { domain: config.cookieDomain })
-  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain })
+  Cookies.set('access', response.data.access, { domain: config.cookieDomain, expires: 10 })
+  Cookies.set('refresh', response.data.refresh, { domain: config.cookieDomain, expires: 10 })
   return camelizeKeys(response.data)
 }
