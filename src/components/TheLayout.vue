@@ -71,6 +71,17 @@
           </span>
         </v-col>
       </v-row>
+      <v-footer
+        app
+        padless
+      >
+        <span
+          class="d-flex justify-end"
+          style="width: 100%"
+        >
+          <span class="d-flex ml-2 py-2 px-4 grey--text text--darken-1 font-weight-light"> Version: {{ version }} </span>
+        </span>
+      </v-footer>
     </v-container>
     <div v-else>
       <v-progress-linear
@@ -93,7 +104,7 @@
         padless
       >
         <span
-          class="d-flex justify-end mt-2"
+          class="d-flex justify-end py-1"
           style="width: 100%"
         >
           <span class="d-flex ml-2">
@@ -135,11 +146,13 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator'
 import Vue from 'vue'
+import config from '@/config'
 
 @Component
 export default class TheLayout extends Vue {
   isLoading = false
   isMobile = document.body.clientWidth <= 768
+  version = config.version
 
   async load<T>(promise: Promise<T>) {
     this.isLoading = true
