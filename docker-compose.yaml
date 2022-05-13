@@ -1,0 +1,9 @@
+services:
+  auth-frontend:
+    image: shi2002/auth_frontend:dev
+    container_name: auth-frontend
+    environment:
+      - VUE_APP_AUTH_URL=${AUTH_URL}
+      - VUE_APP_COOKIE_DOMAIN=${COOKIE_DOMAIN}
+    ports:
+      - 3001:80

@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock /app/
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY . /app
 
@@ -16,8 +16,12 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 ADD default.conf /etc/nginx/conf.d/
 
-WORKDIR /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-COPY --from=builder /app/dist .
+COPY ./entryPoint.sh /
+RUN chmod +x entryPoint.sh
 
 EXPOSE 80
+
+ENTRYPOINT ["sh","/entryPoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
