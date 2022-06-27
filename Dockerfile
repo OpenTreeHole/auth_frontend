@@ -25,3 +25,4 @@ EXPOSE 80
 
 ENTRYPOINT ["sh","/entryPoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
+
